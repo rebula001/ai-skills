@@ -1,0 +1,37 @@
+---
+name: your-skill-name
+description: Use when the user needs this repeatable workflow, project-specific rule, or domain-specific process.
+---
+
+# Your Skill Name
+
+## When To Use
+- 当用户提出与该 skill 直接相关的任务时使用
+- 当任务需要项目特有流程、命名规则或检查步骤时使用
+
+## Quick Start
+- 先确认用户目标和当前上下文
+- 检查是否需要读取 `references/` 中的附加资料
+- 如存在脚本，优先复用 `scripts/` 中的工具
+
+## Workflow
+1. 明确输入信息
+2. 执行标准流程
+3. 验证输出结果
+4. 用当前任务需要的方式回报关键结论或产出结果
+
+## Inputs To Confirm
+- 项目阶段：
+- 相关页面/功能：
+- 当前限制：
+
+## Output Expectations
+- 输出应尽量简洁、可执行、可维护
+- 如果涉及代码或文档修改，优先保持与目标项目现有风格一致
+
+## References
+- 如需详细规则，请读取 `references/` 下对应文件
+
+## Notes
+- 保持 `SKILL.md` 精简
+- 详细知识不要堆在这里，优先拆到 `references/`

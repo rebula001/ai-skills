@@ -1,0 +1,7 @@
+interface:
+  display_name: "Git Commit"
+  short_description: "Draft and confirm Conventional Commits"
+  default_prompt: "Use $git-commit to inspect my changes, draft an English Conventional Commit message, and wait for my approval before committing."
+
+policy:
+  allow_implicit_invocation: true
