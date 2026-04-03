@@ -1,0 +1,7 @@
+interface:
+  display_name: "Submodule Sync"
+  short_description: "Commit and sync changed submodules"
+  default_prompt: "Use $submodule-sync to inspect a changed submodule, commit it, push it to its upstream repository, and then update the parent project's submodule pointer."
+
+policy:
+  allow_implicit_invocation: true
