@@ -78,6 +78,9 @@ description: Use when the user says “请同步子模块” and wants to commit
 - 不要把子模块仓库的 push 和主项目仓库的 push 混为一谈
 - 如果子模块 push 失败，应先解释失败原因，再决定是否继续
 - 如果子模块 push 失败，则不要继续提交主项目中的 submodule 指针更新
+- AI 可以完成本地检查、改动范围确认、commit message 起草、本地提交，以及主项目中的 submodule 指针更新
+- 如果目标是私有 SSH 仓库，而当前 AI 执行环境无法访问用户本机的 SSH 凭据，push 这一步可能需要用户在自己的本机终端或 SourceTree 中执行
+- 一旦用户在本机完成子模块仓库的 push，AI 应继续完成主项目中的 submodule 指针更新
 
 ## Safety Rules
 - 不要在未识别清楚目标子模块时执行同步
@@ -119,3 +122,4 @@ description: Use when the user says “请同步子模块” and wants to commit
 - 这个 skill 的核心目标是：把子模块改动安全地推回子模块自己的仓库，并让主项目正确记录新的 submodule 指针
 - 如果用户只是想普通提交单一仓库改动，应优先使用 `git-commit`
 - 如果用户说“请同步子模块”，优先理解为执行这一整套同步流程
+- 在私有 SSH 仓库场景中，允许用户手动完成 push，而 AI 继续完成后续的主项目 submodule 更新步骤
