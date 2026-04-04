@@ -19,6 +19,7 @@ description: Use when the user says “请同步子模块” and wants to commit
 - 先检查子模块当前分支、工作区状态，以及是否处于 detached HEAD
 - 如果子模块处于 detached HEAD，不要直接在该状态下继续 push，先切回目标分支
 - 起草标题和 `description` 时，应复用 `git-commit` 中关于范围检查、英文输出、Conventional Commits 和确认流程的规则
+- 即使用户的第一句话是“请同步子模块”，也只表示“开始同步流程”，不表示“已经确认可以执行提交或 push”
 - 用户确认后，先提交子模块仓库，再确认并 push 到子模块自己的远程仓库
 - 子模块 push 成功后，再回到主项目，起草 submodule 指针更新的 commit message
 - 用户确认后，再提交主项目中的 submodule 指针更新
@@ -44,14 +45,16 @@ description: Use when the user says “请同步子模块” and wants to commit
 5. 如果子模块是 detached HEAD，明确告诉用户，并切回目标分支后继续
 6. 检查子模块实际改动，并按 `git-commit` 的规则起草英文 Conventional Commit 标题和可选 `description`
 7. 向用户展示子模块将提交的文件、子模块当前分支、拟定的 commit 标题和可选 `description`
-8. 用户确认后，在子模块仓库内执行 `git add <paths>` 和 `git commit`
-9. 提交成功后，明确展示将要 push 的目标仓库和目标分支，并再次请求确认
-10. 用户确认后，执行子模块仓库的 push
-11. push 成功后，回到主项目，检查 `.gitmodules` 与 submodule 指针状态
-12. 起草主项目的 submodule 指针更新 commit message
-13. 向用户展示主项目当前分支、将要提交的 submodule 路径、拟定的 commit message
-14. 用户确认后，提交主项目中的 submodule 指针更新
-15. 如需 push 主项目仓库，必须单独再次确认 push 目标仓库和目标分支
+8. 在展示完这些信息后，明确暂停并等待用户确认是否提交到该子模块当前分支
+9. 用户确认后，在子模块仓库内执行 `git add <paths>` 和 `git commit`
+10. 提交成功后，明确展示将要 push 的目标仓库和目标分支，并再次请求确认
+11. 用户确认后，执行子模块仓库的 push
+12. push 成功后，回到主项目，检查 `.gitmodules` 与 submodule 指针状态
+13. 起草主项目的 submodule 指针更新 commit message
+14. 向用户展示主项目当前分支、将要提交的 submodule 路径、拟定的 commit message
+15. 在展示完这些信息后，明确暂停并等待用户确认是否提交到主项目当前分支
+16. 用户确认后，提交主项目中的 submodule 指针更新
+17. 如需 push 主项目仓库，必须单独再次确认 push 目标仓库和目标分支
 
 ## Commit Message Rules
 - 子模块仓库和主项目仓库的 commit message 都必须使用英文
@@ -85,6 +88,7 @@ description: Use when the user says “请同步子模块” and wants to commit
 ## Safety Rules
 - 不要在未识别清楚目标子模块时执行同步
 - 不要在存在多个候选子模块时自行猜测
+- 不要把用户最初的“请同步子模块”误判为子模块提交确认、子模块 push 确认或主项目提交确认
 - 不要在未确认当前分支名称的情况下提交
 - 不要在未确认 push 目标仓库和目标分支的情况下 push
 - 不要跳过子模块仓库提交，直接提交主项目 submodule 指针
@@ -98,6 +102,7 @@ description: Use when the user says “请同步子模块” and wants to commit
 - `Files to commit:` 列出子模块将要提交的文件
 - `Proposed title:` 给出英文 commit 标题
 - `Proposed description:` 给出英文正文描述；如果不需要，明确写 `None`
+- `Confirm branch target:` 询问用户是否确认提交到该子模块当前分支
 - `Please confirm:` 请用户确认是否在子模块仓库执行提交
 
 ## Output Format Before Submodule Push
@@ -111,6 +116,7 @@ description: Use when the user says “请同步子模块” and wants to commit
 - `Submodule pointer update:` 列出将更新的子模块路径
 - `Proposed title:` 给出主项目提交标题
 - `Proposed description:` 给出主项目正文描述；如果不需要，明确写 `None`
+- `Confirm branch target:` 询问用户是否确认提交到主项目当前分支
 - `Please confirm:` 请用户确认是否提交主项目中的 submodule 指针更新
 
 ## Output Format Before Parent Push

@@ -22,11 +22,15 @@ description: Use when the user asks to commit changes, commit selected files, th
 - 默认先检查未暂存和已暂存改动，再生成 commit 文案
 - 默认先检查当前所在分支名称，并明确本次提交只会发生在当前分支
 - 在用户确认前，只生成建议的 commit message 和待提交范围
+- 即使用户的第一句话是“请提交”，也只表示“开始提交流程”，不表示“已经确认可以执行提交”
+- 在任何情况下，都必须先把 `current branch`、`proposed title` 和 `proposed description` 展示给用户
+- 在任何情况下，都必须明确询问用户是否确认提交到当前分支
 - 只有在用户明确确认后，才执行 `git add` 和 `git commit`
 - 默认提交到当前仓库当前分支
 - 不自动 push 到远程仓库，push 由用户自行执行
 
 ## Confirmation Rules
+- “请提交”“commit it”“提交一下”这类初始请求，不视为最终确认，只视为启动 commit 准备流程
 - 以下输入默认视为确认提交：
   - `y`
   - `ok`
@@ -46,6 +50,7 @@ description: Use when the user asks to commit changes, commit selected files, th
   - `不提交`
 - 只有当这些词明确针对当前 commit 确认流程时，才视为有效确认或取消
 - 如果用户回复含义不明确，应继续等待明确确认，而不要直接提交
+- 如果还没有先展示当前分支、拟提交范围和 commit message，则不得把任何简短回复解释为有效确认
 
 ## Scope Defaults
 - “已更改的文件” 默认包括：
@@ -158,12 +163,14 @@ description: Use when the user asks to commit changes, commit selected files, th
    - proposed title
    - proposed description（如需要）
    - 是否确认提交到“当前分支名称”
-11. 只有在用户明确确认后，才执行提交
-12. 提交时只添加确认范围内的文件，不扩大提交范围
-13. 提交后回报最终 commit 标题、description 是否使用、提交所在分支，以及提交结果
+11. 在展示完这些信息后，明确暂停并等待用户确认
+12. 只有在用户明确确认后，才执行提交
+13. 提交时只添加确认范围内的文件，不扩大提交范围
+14. 提交后回报最终 commit 标题、description 是否使用、提交所在分支，以及提交结果
 
 ## Execution Rules
 - 用户确认前，不执行 `git add` 或 `git commit`
+- 用户第一次说“请提交”时，不执行 `git add` 或 `git commit`
 - 用户确认后，仅对已确认范围执行 `git add <paths>`，不要使用会扩大范围的提交方式
 - “请提交” 可以使用当前工作区全部改动作为确认范围
 - “请提交 skills” 默认优先理解为提交主项目中的 skills 子模块变更
@@ -188,6 +195,7 @@ description: Use when the user asks to commit changes, commit selected files, th
 - 不要把文件夹外部的改动加入“请提交这个文件夹”的提交范围
 - 不要自动修改用户写好的代码或文档，只为了让 commit 更“干净”
 - 不要在未经确认的情况下提交
+- 不要把用户最初的“请提交”误判为最终确认
 - 不要在未确认当前分支名称的情况下提交
 - 不要把“提交”误解为 push
 - 不要使用 `git commit --amend`，除非用户明确要求
