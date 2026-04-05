@@ -55,11 +55,13 @@ disable-model-invocation: true
 8. 等待用户确认或异议说明：
    - 如果用户不同意，应继续解释原因或根据用户给出的理由重新判断
    - 如果用户同意，再继续后续步骤
-9. 如项目存在版本文件，先更新版本相关文件，再进行 commit，例如：
-   - `project.config.json`
-   - 插件主文件中的 `Version`
-10. 调用 `/git-commit`，由它按照实际改动范围起草并确认最终 commit 标题和描述
-11. 在该最终 commit 上创建 Git tag，例如：
+9. 用户确认发布版本号后，必须检查该版本号是否与 `project.config.json` 中的 `version` 一致
+10. 如果不一致，必须先提醒用户版本不一致，并询问是否将 `project.config.json` 更新为确认后的版本号
+11. 如果用户同意，先更新版本文件，再继续后续步骤，例如：
+    - `project.config.json`
+    - 插件主文件中的 `Version`
+12. 调用 `/git-commit`，由它按照实际改动范围起草并确认最终 commit 标题和描述
+13. 在该最终 commit 上创建 Git tag，例如：
     - `v0.2.0`
 
 ## Baseline Version Rules
@@ -73,9 +75,10 @@ disable-model-invocation: true
 
 ## Version File Rules
 
-- 如果项目存在统一版本文件或配置文件，应在 release commit 之前先完成更新
-- 否则最终发布 commit 将无法真实包含版本变化
-- 版本文件更新完成后，再执行最终 commit 与 tag 流程
+- 用户一旦确认发布版本号，AI 必须检查该版本号是否与 `project.config.json` 中的 `version` 一致
+- 如果不一致，必须先提醒用户并获得确认，再把 `project.config.json` 更新为一致值
+- 只有版本文件同步完成后，才能继续最终 commit 与 tag 流程
+- 不应把“版本文件未同步”留到发布 commit 之后再补救，除非用户明确要求例外流程
 
 ## Commit Rules
 
@@ -116,9 +119,10 @@ disable-model-invocation: true
    - 原因：向后兼容地新增功能
    - 是否继续进入发布提交流程：`Yes`
 5. 用户确认
-6. AI 先更新版本文件
-7. AI 调用 `/git-commit`，由它根据实际改动生成最终 commit message
-8. AI 为该 commit 创建 tag：
+6. AI 检查 `project.config.json` 中的 `version` 是否已为 `0.2.0`
+7. 如果不一致，先提醒用户并在用户同意后更新版本文件
+8. AI 调用 `/git-commit`，由它根据实际改动生成最终 commit message
+9. AI 为该 commit 创建 tag：
    - `v0.2.0`
 
 ## Inputs To Confirm
@@ -133,6 +137,7 @@ disable-model-invocation: true
 - 必须明确说明为什么是 `PATCH`、`MINOR` 或 `MAJOR`
 - 必须明确说明是否继续进入发布提交流程
 - 必须优先说明当前基准版本是如何确定的
+- 用户确认发布版本号后，必须明确说明是否需要同步更新 `project.config.json`
 - 如进入版本更新步骤，应同步提醒用户检查插件版本、tag 与 package 名称是否一致
 
 ## References
