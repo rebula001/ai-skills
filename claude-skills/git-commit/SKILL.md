@@ -233,3 +233,7 @@ disable-model-invocation: true
 - 如果是 breaking change：
   - 可以在标题中使用 `!`
   - 仍然必须在 body 或 footer 中写 `BREAKING CHANGE: <description>`
+
+## Notes
+- 这个 skill 关注的是“起草并执行一次合规 commit”
+- 如果用户同时需要准备发布版本号或判断版本应如何递增，优先配合 `/release-versioning` skill 先确定版本语义，再继续 commit 流程

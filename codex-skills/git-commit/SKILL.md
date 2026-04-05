@@ -216,4 +216,5 @@ description: Use when the user asks to commit changes, commit selected files, th
 ## Notes
 - 这个 skill 关注的是“起草并执行一次合规 commit”
 - 如果用户只是想改写已有 commit message，单独确认是否需要 amend 或重新提交
+- 如果用户同时需要准备发布版本号或判断版本应如何递增，优先配合 `$release-versioning` skill 先确定版本语义，再继续 commit 流程
 - 官方规范来源：`https://www.conventionalcommits.org/`

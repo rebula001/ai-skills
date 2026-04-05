@@ -1,0 +1,7 @@
+interface:
+  display_name: "Release Versioning"
+  short_description: "Prepare release version bumps"
+  default_prompt: "Use $release-versioning to decide the next release version, explain whether it should be major, minor, or patch, and prepare a dedicated release commit."
+
+policy:
+  allow_implicit_invocation: true
