@@ -1,6 +1,6 @@
 ---
 name: release-versioning
-description: 用于准备发布版本号：判断下一次发布应使用哪个版本、解释为什么是 major/minor/patch、确认是否创建独立 release commit，并在提交前更新版本相关文件。
+description: 用于准备发布版本号：判断下一次发布应使用哪个版本、解释为什么是 major/minor/patch、在提交前更新版本相关文件，并在最终 commit 上添加版本 tag。
 disable-model-invocation: true
 ---
 
@@ -11,14 +11,14 @@ disable-model-invocation: true
 - 当用户要准备一个新版本号时使用
 - 当用户要判断下一次发布应使用 `MAJOR`、`MINOR` 还是 `PATCH` 时使用
 - 当用户要确认是否应该从 `0.y.z` 进入 `1.0.0` 时使用
-- 当用户要更新版本相关文件并创建独立 release commit 时使用
+- 当用户要更新版本相关文件，并在最终 commit 上打版本 tag 时使用
 
 ## Quick Start
 - 先确认当前工作区是否存在准备发布的未提交改动
 - 然后确定当前基准版本，而不是直接假设“上一个 commit”就是上一个发布版本
 - 再读取 `references/semver-2.0.0-guide.md`
 - 基于兼容性判断版本增量，而不是基于“改动看起来大不大”
-- 默认先展示当前版本、建议版本号、升级原因，以及是否创建独立 release commit
+- 默认先展示当前版本、建议版本号、升级原因，以及是否继续进入发布提交流程
 - 需要提交时，再与 `/git-commit` 配合
 
 ## Workflow
@@ -51,16 +51,15 @@ disable-model-invocation: true
    - 建议版本号
    - bump 类型
    - 升级原因
-   - 是否建议创建独立 release commit
+   - 是否继续进入发布提交流程
 8. 等待用户确认或异议说明：
    - 如果用户不同意，应继续解释原因或根据用户给出的理由重新判断
    - 如果用户同意，再继续后续步骤
 9. 如项目存在版本文件，先更新版本相关文件，再进行 commit，例如：
    - `project.config.json`
    - 插件主文件中的 `Version`
-10. 调用 `/git-commit` 创建独立 release commit，例如：
-    - `chore(release): bump version to 0.2.0`
-11. 在该 release commit 上创建 Git tag，例如：
+10. 调用 `/git-commit`，由它按照实际改动范围起草并确认最终 commit 标题和描述
+11. 在该最终 commit 上创建 Git tag，例如：
     - `v0.2.0`
 
 ## Baseline Version Rules
@@ -75,8 +74,16 @@ disable-model-invocation: true
 ## Version File Rules
 
 - 如果项目存在统一版本文件或配置文件，应在 release commit 之前先完成更新
-- 否则 release commit 将无法真实包含版本变化
-- 版本文件更新完成后，再执行 release commit 与 tag 流程
+- 否则最终发布 commit 将无法真实包含版本变化
+- 版本文件更新完成后，再执行最终 commit 与 tag 流程
+
+## Commit Rules
+
+- 不默认创建专门的 release commit
+- 最终 commit 的标题和描述应完全交给 `/git-commit` 根据实际改动范围起草
+- 如果实际改动本质是 `docs`、`chore`、`feat` 或其他类型，应按真实改动语义生成 commit message
+- 版本号不应强行写进普通 commit 标题，除非用户明确要求
+- release-versioning 负责确定版本号与更新版本文件，不负责替代 `/git-commit` 的文案判断
 
 ## Tag Rules
 
@@ -95,7 +102,7 @@ disable-model-invocation: true
   - 建议版本
   - bump 类型：`PATCH / MINOR / MAJOR`
   - 升级原因
-  - 是否建议创建独立 release commit
+  - 是否继续进入发布提交流程
 
 ## Example Flow
 
@@ -107,11 +114,10 @@ disable-model-invocation: true
    - 建议版本：`0.2.0`
    - bump 类型：`MINOR`
    - 原因：向后兼容地新增功能
-   - 是否建议创建独立 release commit：`Yes`
+   - 是否继续进入发布提交流程：`Yes`
 5. 用户确认
 6. AI 先更新版本文件
-7. AI 调用 `/git-commit` 创建：
-   - `chore(release): bump version to 0.2.0`
+7. AI 调用 `/git-commit`，由它根据实际改动生成最终 commit message
 8. AI 为该 commit 创建 tag：
    - `v0.2.0`
 
@@ -120,12 +126,12 @@ disable-model-invocation: true
 - 本次发布改动范围：
 - 是否存在 public API / public contract：
 - 是否要求向后兼容：
-- 是否要创建独立 release commit：
+- 是否继续进入发布提交流程：
 
 ## Output Expectations
 - 必须明确给出建议版本号
 - 必须明确说明为什么是 `PATCH`、`MINOR` 或 `MAJOR`
-- 必须明确说明是否建议创建独立 release commit
+- 必须明确说明是否继续进入发布提交流程
 - 必须优先说明当前基准版本是如何确定的
 - 如进入版本更新步骤，应同步提醒用户检查插件版本、tag 与 package 名称是否一致
 
@@ -135,6 +141,6 @@ disable-model-invocation: true
 
 ## Notes
 - 本 skill 以 `https://semver.org/` 的 Semantic Versioning 2.0.0 为基线
-- 本 skill 关注“发布前版本号判断与 release commit 准备”
+- 本 skill 关注“发布前版本号判断、版本文件更新与版本 tag 准备”
 - 本 skill 不直接负责具体项目的打包与发布实现
 - 需要执行 commit 时应与 `/git-commit` 配合
