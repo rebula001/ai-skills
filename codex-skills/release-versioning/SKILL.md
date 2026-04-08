@@ -56,11 +56,19 @@ description: Use when the user wants to prepare a release version, decide the ne
    - 如果用户同意，再继续后续步骤
 9. 用户确认发布版本号后，必须检查该版本号是否与 `project.config.json` 中的 `version` 一致
 10. 如果不一致，必须先提醒用户版本不一致，并询问是否将 `project.config.json` 更新为确认后的版本号
-11. 如果用户同意，先更新版本文件，再继续后续步骤，例如：
-    - `project.config.json`
-    - 插件主文件中的 `Version`
-12. 调用 `$git-commit`，由它按照实际改动范围起草并确认最终 commit 标题和描述
-13. 在该最终 commit 上创建 Git tag，例如：
+11. 如果用户同意，先更新版本文件，再继续后续步骤
+12. 对于本项目，版本更新应遵循单一来源规则：
+    - 只手动修改 `project.config.json` 中的 `version`
+    - 其余版本文件不得手动逐个修改，应通过同步命令统一更新，例如：
+      - `frontend/package.json`
+      - `frontend/package-lock.json`
+      - `backend/wt-wp-multi-lang.php`
+      - `sonar-project.properties`
+13. 如果 AI 运行在 `WSL` 中，执行同步命令时应优先使用项目包装脚本，而不是直接运行原生 `npm`，例如：
+    - `cd frontend && ../scripts/npmw.sh run sync:project-config`
+14. 只有在同步命令执行完成后，才能继续最终 commit 与 tag 流程
+15. 调用 `$git-commit`，由它按照实际改动范围起草并确认最终 commit 标题和描述
+16. 在该最终 commit 上创建 Git tag，例如：
     - `v0.2.0`
 
 ## Baseline Version Rules
@@ -76,6 +84,15 @@ description: Use when the user wants to prepare a release version, decide the ne
 
 - 用户一旦确认发布版本号，AI 必须检查该版本号是否与 `project.config.json` 中的 `version` 一致
 - 如果不一致，必须先提醒用户并获得确认，再把 `project.config.json` 更新为一致值
+- 对于本项目，`project.config.json.version` 是唯一允许手动修改的版本入口
+- `frontend/package.json`
+- `frontend/package-lock.json`
+- `backend/wt-wp-multi-lang.php`
+- `sonar-project.properties`
+  这些文件的版本号不应手动逐个编辑，而应通过同步脚本统一生成
+- 如果 AI 运行在 `WSL` 中，默认应使用：
+  - `cd frontend && ../scripts/npmw.sh run sync:project-config`
+  来完成版本同步
 - 只有版本文件同步完成后，才能继续最终 commit 与 tag 流程
 - 不应把“版本文件未同步”留到发布 commit 之后再补救，除非用户明确要求例外流程
 
