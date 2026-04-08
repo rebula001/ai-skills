@@ -19,6 +19,7 @@ disable-model-invocation: true
 - 一个 commit message 包括 `title` 和可选 `description`
 - commit 的 `title` 和 `description` 必须使用英文
 - commit message 必须遵循 Conventional Commits 风格
+- 只要提交涉及多文件、多主题，或任务状态更新，默认应提供 `description`
 - 默认先检查未暂存和已暂存改动，再生成 commit 文案
 - 默认先检查当前所在分支名称，并明确本次提交只会发生在当前分支
 - 在用户确认前，只生成建议的 commit message 和待提交范围
@@ -117,6 +118,7 @@ disable-model-invocation: true
 - 如果本次提交只对应一个简单任务，且没有可拆分的子任务，通常只需要 `title`
 - 如果只提交一个文件，或提交多个文件但它们本质上是在完成同一个简单任务，通常只需要 `title`
 - 如果一次提交同时包含多个任务，或一个任务内部还包含多个子任务，才添加 `description`
+- 只要本次提交涉及多文件、多主题，或任务状态更新，默认添加 `description`
 - 如果 `description` 中需要说明多个不同任务，使用一个 description，并在其中使用列表形式逐项说明
 - 必须遵循 Conventional Commits 1.0.0 结构：
   - `<type>[optional scope]: <description>`
@@ -138,6 +140,7 @@ disable-model-invocation: true
 - footer 可用于附加元信息，并遵循类似 git trailer 的格式，例如：`Refs: #123`、`Fixes: #45`
 - `subject` 使用英文、简短、明确
 - 标题末尾不加句号
+- 如果提交涉及多文件、多主题，或任务状态更新，即使标题看起来已经可读，默认仍应补充 `description`
 - 优先使用最贴近改动本质的类型，例如：`feat`、`fix`、`docs`、`refactor`、`perf`、`chore`、`style`、`test`、`build`、`ci`
 
 ## Workflow
