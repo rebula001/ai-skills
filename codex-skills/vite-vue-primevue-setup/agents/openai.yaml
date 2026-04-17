@@ -1,0 +1,4 @@
+interface:
+  display_name: "Vite Vue PrimeVue Setup"
+  short_description: "Set up Vite + Vue + PrimeVue projects with shared tooling."
+  default_prompt: "请配置前端：set up a Vite + Vue + PrimeVue frontend using the standard workflow."
