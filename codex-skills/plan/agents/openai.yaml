@@ -1,0 +1,4 @@
+interface:
+  display_name: "模块计划"
+  short_description: "为一个软件模块建立可迭代计划"
+  default_prompt: "使用 $plan 规划我指定的模块，定义其目标、边界、输入、输出和当前交付切片。"
