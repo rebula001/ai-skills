@@ -1,295 +1,63 @@
-# AI Skills Submodule
+# AI Skills
 
-本仓库作为共享的 AI skills 仓库使用，可通过 Git submodule 引入到不同项目中。
+本仓库维护可在不同项目中复用的 AI skills：
 
-在当前项目中的配置是：
+- [Codex skills](codex-skills/README.md)
+- [Claude Code skills](claude-skills/README.md)
 
-- 项目路径：`.ai-skills/`
-- 远程仓库：`git@github.com:rebula001/ai-skills.git`
-- Codex skills：`codex-skills/`
-- Claude skills：`claude-skills/`
+不同助手的版本分别维护；更新共同工作流程时，检查两个版本是否需要同步，同时保留各自的配置差异。skill 的入口是 `SKILL.md`，按需使用同目录下的参考资料、脚本或资源。
 
-Submodule 的核心规则是：主项目只记录 `.ai-skills` 当前指向的某一个提交。也就是说，本仓库更新后，使用它的项目不会自动跟着变，需要在对应项目里手动更新并提交一次 submodule 指针。
+普通提交、分类提交及子模块提交统一由对应版本的 `git-commit` skill 处理：[Codex](codex-skills/git-commit/SKILL.md) / [Claude](claude-skills/git-commit/SKILL.md)。
 
-## 新项目如何配置 Submodule
+## 编写原则
 
-如果一个新项目还没有配置 `.ai-skills`，需要在项目根目录准备 `.gitmodules`，并让 Git 在主项目索引里登记 `.ai-skills` 的 submodule 指针。
+- 优先为反复出现、值得跨项目复用的流程编写 skill；项目状态和一次性事项放在对应项目文档中。
+- 入口说明适用场景、必要流程和约束；较长或只在特定情况下使用的资料放入 `references/`，并从入口链接。避免多处重复维护同一规则。
+- 不在仓库中保存密码、密钥或其他敏感信息；引用外部内容和资源时核实来源及许可。
+- 项目应明确选择实际需要的 skills；将本仓库加入项目不代表自动启用全部 skills。项目的明确指令和规则仍然适用。
 
-`.gitmodules` 文件应放在项目根目录，内容如下：
+## 在项目中使用 Git 子模块
 
-```ini
-[submodule ".ai-skills"]
-	path = .ai-skills
-	url = git@github.com:rebula001/ai-skills.git
-```
+以下命令假设主项目位于当前目录，并以 `.ai-skills` 为子模块路径。实际路径和远程地址由项目自行配置；示例使用本仓库的 SSH 地址。
 
-其中：
-
-- `path` 表示 submodule 在当前项目里的目录。
-- `url` 表示 submodule 对应的远程仓库地址。
-
-不过，仅仅创建 `.gitmodules` 还不够。`.gitmodules` 只是配置文件，Git 还需要在主项目里记录 `.ai-skills` 当前指向的提交。推荐直接在项目根目录执行：
+在尚未添加子模块的项目中：
 
 ```bash
 git submodule add git@github.com:rebula001/ai-skills.git .ai-skills
-```
-
-这条命令会自动创建或更新 `.gitmodules`，并把 `.ai-skills` 登记为 submodule。
-
-如果 `.ai-skills/` 已经存在，但只是一个空目录，可以先删除空目录：
-
-```bash
-rmdir .ai-skills
-git submodule add git@github.com:rebula001/ai-skills.git .ai-skills
-```
-
-添加完成后检查：
-
-```bash
 git status
 git submodule status
-git ls-files --stage .ai-skills .gitmodules
 ```
 
-如果 `git ls-files --stage .ai-skills` 的输出以 `160000` 开头，说明 `.ai-skills` 已经被 Git 正确登记为 submodule。
+`git submodule add` 会登记子模块并创建或更新 `.gitmodules`。检查结果后，在主项目提交 `.gitmodules` 和子模块指针；**子模块路径可用，并不代表助手已经发现或启用其中的 skills**。
 
-然后在主项目中提交：
-
-```bash
-git add .gitmodules .ai-skills
-git commit -m "chore(skills): add ai-skills submodule"
-```
-
-最后再 push 当前项目仓库：
-
-```bash
-git push
-```
-
-注意，这一步 push 的是当前项目仓库，不是公共 `ai-skills` 仓库。
-
-## 克隆项目后如何初始化 Submodule
-
-其他人首次克隆使用 `.ai-skills` 的项目后，需要初始化 submodule：
+克隆已有项目后，在主项目根目录初始化已登记的子模块：
 
 ```bash
 git submodule update --init --recursive
 ```
 
-如果只想初始化 `.ai-skills`：
+也可以克隆时使用 `git clone --recurse-submodules <project-url>`。如需检查 Git 是否已登记子模块，可使用 `git ls-files --stage .ai-skills`；输出以 `160000` 开头表示该路径是子模块指针。
+
+## 修改共享 skill
+
+主项目记录的是子模块的提交指针，子模块内部改动与主项目是两个独立仓库。操作前分别检查两者，确认分支、远程地址、已暂存内容和未提交改动：
 
 ```bash
-git submodule update --init .ai-skills
-```
-
-初始化后检查：
-
-```bash
-git submodule status --recursive
-```
-
-如果看到 `.ai-skills` 对应的提交号，说明初始化成功。
-
-也可以在克隆时一次性带上 submodule：
-
-```bash
-git clone --recurse-submodules <project-repo-url>
-```
-
-## 在项目中修改 Submodule 后如何更新仓库
-
-如果你在项目里修改了 `.ai-skills/` 里面的文件，例如：
-
-```text
-.ai-skills/codex-skills/git-commit/SKILL.md
-```
-
-需要提交两次：
-
-1. 先在 `.ai-skills/` 子模块仓库里提交并 push 到公共 `ai-skills` 仓库。
-2. 再回到主项目仓库，提交 `.ai-skills` 的 submodule 指针更新。
-
-这两次提交属于两个不同仓库，不能混在一起。
-
-### 1. 进入子模块仓库
-
-```bash
-cd .ai-skills
-```
-
-### 2. 确认当前在 main 分支
-
-```bash
-git branch --show-current
-git status
-```
-
-如果分支名为空，或者状态里出现 `HEAD detached from ...`，说明当前处于 detached HEAD。先切回 `main`：
-
-```bash
-git switch main
-```
-
-然后同步远程最新提交：
-
-```bash
-git pull --ff-only origin main
-```
-
-建议在开始修改 `.ai-skills/` 文件之前就完成这一步，避免把修改提交到 detached HEAD。
-
-### 3. 在子模块里提交修改
-
-先查看这次在子模块里改了哪些文件：
-
-```bash
-git status
-```
-
-然后用 `git add` 把要提交的文件加入暂存区。`git add <changed-path>` 里的 `<changed-path>` 是占位写法，实际使用时要替换成具体文件或目录。
-
-只提交某一个文件：
-
-```bash
-git add <changed-path>
-```
-
-例如：
-
-```bash
-git add codex-skills/git-commit/SKILL.md
-```
-
-提交某一个目录下的全部改动：
-
-```bash
-git add codex-skills/git-commit
-```
-
-提交当前目录下的全部改动：
-
-```bash
-git add .
-```
-
-`git add .` 会把当前所在目录及其子目录里的新增、修改、删除都加入暂存区。因为这一步是在 `.ai-skills/` 目录里执行，所以它只会暂存 `.ai-skills` 子模块仓库里的改动，不会暂存主项目根目录里的文件。
-
-暂存完成后再提交：
-
-```bash
-git commit -m "chore(skills): update shared skill"
-```
-
-完整例子：
-
-```bash
-git status
-git add codex-skills/git-commit/SKILL.md
-git commit -m "chore(skills): refine git commit workflow"
-```
-
-### 4. 推送公共 ai-skills 仓库
-
-```bash
-git push origin main
-```
-
-这一步推送的是公共 `ai-skills` 仓库。
-
-如果当前执行环境无法访问你的 SSH 凭据，而公共仓库又是私有 SSH 仓库，这一步需要你在自己的本机终端或 SourceTree 中完成。
-
-### 5. 回到主项目并提交 submodule 指针
-
-```bash
-cd ..
 git status
 git submodule status
-git add .ai-skills
-git commit -m "chore(skills): update ai-skills submodule"
-```
-
-这一步提交的是主项目仓库里的 submodule 指针。它告诉主项目：“以后使用公共 `ai-skills` 仓库里的这个新提交。”
-
-最后 push 主项目仓库：
-
-```bash
-git push
-```
-
-## 只同步公共 ai-skills 的新提交
-
-如果公共 `ai-skills` 仓库已经有新提交，而你只是想让某个项目使用那个最新提交，可以在主项目根目录执行：
-
-```bash
-git submodule update --remote .ai-skills
-```
-
-然后提交主项目里的 submodule 指针：
-
-```bash
-git status
-git add .ai-skills
-git commit -m "chore(skills): update ai-skills submodule"
-git push
-```
-
-也可以显式进入子模块拉取：
-
-```bash
-git -C .ai-skills pull --ff-only origin main
-```
-
-拉取后同样需要回到主项目提交 `.ai-skills` 指针更新。
-
-## 常见问题
-
-### git submodule update --init --recursive 没有反应
-
-这个命令只会初始化或更新已经被主项目登记过的 submodule。如果没有输出，常见原因是：
-
-- 当前仓库还没有登记任何 submodule。
-- `.gitmodules` 文件存在，但还没有提交到主项目。
-- `.ai-skills` 只是普通目录，还没有通过 `git submodule add` 登记成 submodule。
-
-检查命令：
-
-```bash
-git submodule status --recursive
-git ls-files --stage .ai-skills .gitmodules
-```
-
-如果 `git submodule status --recursive` 没有输出，通常表示 Git 当前没有识别到可更新的 submodule。
-
-### 误在 detached HEAD 里提交了怎么办
-
-如果你在 `.ai-skills/` 里看到：
-
-```text
-HEAD detached from <commit>
-```
-
-并且已经误提交了一个 commit，不要直接 reset。先记住这个误提交的 commit id，例如 `4418e38`，然后：
-
-```bash
-git switch main
-git pull --ff-only origin main
-git cherry-pick 4418e38
-git push origin main
-```
-
-成功后，再回到主项目根目录提交 `.ai-skills` 的 submodule 指针更新。
-
-### 主项目里看到 .ai-skills 已修改
-
-通常表示两种情况之一：
-
-- 子模块内部有未提交改动。
-- 子模块已经切换到了新的提交，但主项目还没有提交这个指针变化。
-
-可以分别检查：
-
-```bash
-git status
 git -C .ai-skills status
-git submodule status
+git -C .ai-skills branch --show-current
+git -C .ai-skills remote -v
 ```
+
+子模块处于 detached HEAD 时，先确认要保留的提交及工作区改动，再选择合适的分支或其他处理方式；不要盲目切换、重置或拉取。具体流程：
+
+1. 在子模块内检查并提交需要共享的改动，保留不属于本次提交的文件和原有暂存内容。
+2. 如其他人需要访问该提交，将子模块提交推送到可访问的远程仓库；先确认目标分支与远程地址。暂不推送也可保留本地提交，但其他人可能无法检出它。
+3. 回到主项目，检查 `.ai-skills` 指向预期提交，再提交主项目中的指针变更。主项目的推送是独立操作。
+
+提交和推送由用户决定；助手按项目指令及所用 skill 的授权流程执行。不要假定固定使用 `main` 或 `origin`，也不要将子模块内部提交误认为主项目指针已更新。
+
+## 更新已有项目的子模块
+
+如果要让项目使用共享仓库中的另一个提交，先检查主项目与子模块工作区并确认目标版本，再在子模块中切换到该提交。操作前保留已有改动；完成后在主项目检查并提交指针。`git submodule update --remote .ai-skills` 会依据子模块配置获取远程版本，使用前应先确认目标及工作区状态，不应默认视为安全的最新版本更新。

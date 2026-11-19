@@ -1,87 +1,40 @@
-# Conventional Commit Guide
+# Conventional Commits 1.0.0 本地参考
 
-## Goal
-帮助为一次提交生成简洁、准确、可验证的英文 commit message。
+本文件根据 Conventional Commits 1.0.0 整理，供日常提交离线使用；来源见文末。先遵守规范，再应用本 skill 的附加约定。
 
-## Preferred Format
+## Title 和 Description
+
+- **Title**：提交的第一行，必须填写，例如 `fix(database): preserve row order`。
+- **Description**：向用户展示的可选提交正文（Git 中的 body），用于补充改动原因、行为或限制；必要时填写，不能只重复标题。
+- Title 和 Description 均使用英文。它们不同于规范结构中标题冒号后的 `<description>`，后者只是标题中的简短描述。
+
+## 提交结构
+
 ```text
-type(scope): subject
-```
-
-完整结构：
-```text
-<type>[optional scope]: <description>
+<type>[optional scope][optional !]: <description>
 
 [optional body]
 
 [optional footer(s)]
 ```
 
-示例：
-```text
-docs(codex): add project skill templates
-fix(woocommerce): correct cart total calculation
-feat(storefront): add featured products section
-```
+- 标题必须以类型开头，类型为名词；可附 scope 和破坏性变更标记 `!`，其后必须是冒号、空格和简短描述。
+- `feat` 表示新增功能，`fix` 表示修复缺陷；也可以使用 `docs`、`refactor`、`perf`、`test`、`build`、`ci`、`style`、`chore` 等类型。
+- scope 可选；如使用，必须用括号包围名词，表示受影响的代码范围，例如 `fix(database): preserve row order`。
+- 正文可选，与标题之间必须有一个空行；正文可由多个段落组成。
+- footer 可选，位于正文之后并以空行分隔；没有正文时与标题之间以空行分隔。每项由 token、分隔符和值组成：分隔符为冒号加空格或空格加 `#`，例如 `Reviewed-by: name`、`Refs #123`。
+- footer 的 token 使用连字符替代空格；`BREAKING CHANGE` 是允许包含空格的例外。值可包含空格或换行，遇到下一个有效 token 和分隔符时结束。
 
-## Type Selection
-- `feat`: 新功能
-- `fix`: 修复 bug
-- `docs`: 文档变更
-- `refactor`: 重构但不新增功能也不修复 bug
-- `perf`: 性能优化
-- `chore`: 杂项维护、工具或配置更新
-- `style`: 纯格式调整
-- `test`: 测试相关
-- `build`: 构建系统或依赖相关
-- `ci`: CI/CD 相关
+## 破坏性变更
 
-说明：
-- `feat` 和 `fix` 是规范中具有明确语义的核心类型
-- 其他类型是允许的，但它们本身不自动对应 SemVer 级别
+- 破坏性变更必须通过类型或 scope 后、冒号前的 `!`，或者通过 footer 表明；它可以属于任何类型。
+- 官方规范允许只使用 `!`；此时标题中的描述必须说明破坏性变更。也可以使用 `BREAKING CHANGE: <description>` footer，其中标记必须大写，描述必须说明变化；footer token `BREAKING-CHANGE` 与 `BREAKING CHANGE` 等价。
+- 本 skill 的附加约定：即使标题已经使用 `!`，也要在正文或 footer 中补充 `BREAKING CHANGE: <description>`，清楚解释影响。
 
-## Subject Rules
-- 使用英文
-- 紧跟在 `type` 或 `type(scope)` 后
-- 使用简短、明确的短句
-- 不要在末尾加句号
-- 尽量描述“改动意图”而不是“操作动作列表”
+## 本 skill 的写作约定
 
-## Body Rules
-- 如果提交只对应一个简单任务，且没有子任务，通常不需要正文
-- 如果提交包含多个任务，或一个任务中包含多个子任务，再写正文
-- 正文使用英文完整句子或简洁短句
-- 如果存在正文，必须与标题之间空一行
-- 避免把 diff 逐条翻译成说明
-- 如果正文同时说明多个不同任务，优先使用列表来提高可读性
-- 多个任务应写在同一个正文中，作为多个列表项出现，而不是拆成多个分离段落
+- 标题和正文使用英文；标题简短、明确，描述变更意图，末尾不加句号。标题足以说明简单变更时可省略正文；涉及复杂行为、原因或限制时补充正文。正文有多个适合并列说明的要点时，优先使用列表，提高可读性。
+- 规范信息通常不区分大小写，但 `BREAKING CHANGE` 标记必须大写；本 skill 的类型名称统一使用小写。
+- 按语义选择类型；`fix`、`feat` 和破坏性变更通常分别对应 SemVer 的补丁、次版本和主版本语义，其他类型不自动决定版本。是否发布或升级版本由项目决定。
 
-## Footer Rules
-- footer 是可选的
-- 如果存在 footer，必须与正文之间空一行；如果没有正文，则与标题之间空一行
-- footer 可写附加元信息，例如：
-  - `Refs: #123`
-  - `Fixes: #45`
-  - `Reviewed-by: name`
-
-## Breaking Change Rules
-- breaking change 可以出现在任何 type 中
-- 可以在标题中使用 `!`，例如：
-  - `feat(api)!: remove legacy endpoint`
-- 但仍然必须在 body 或 footer 中写：
-  - `BREAKING CHANGE: <description>`
-- `BREAKING CHANGE` 必须全大写
-- 其后必须跟清晰描述，说明破坏性变化是什么
-
-## Scope Guidance
-- `scope` 可选
-- 有明显模块边界时再加，例如：`docs`、`woocommerce`、`blocksy`、`codex`
-- 如果没有清晰 scope，可以省略
-
-## SemVer Mapping
-- `fix` 对应 `PATCH`
-- `feat` 对应 `MINOR`
-- 含有 `BREAKING CHANGE` 的提交对应 `MAJOR`
-
-## Source
-- Official spec: https://www.conventionalcommits.org/
+来源：[Conventional Commits 1.0.0](https://www.conventionalcommits.org/en/v1.0.0/)。日常使用本地参考，无需为每次提交访问官网。

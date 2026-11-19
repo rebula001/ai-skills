@@ -1,67 +1,26 @@
-# Codex Skills Repository
+# Codex Skills
 
-这个目录用于集中维护可复用的 Codex skills，供多个项目通过子模块或同步方式共享使用。
+本目录维护供 Codex 使用的共享 skills。共享仓库的使用与编写原则见[根目录 README](../README.md)。
 
-## Purpose
-- 沉淀可跨项目复用的工作流、约定和领域知识
-- 让不同项目中的 Codex 会话更快进入稳定工作方式
-- 将复杂或高频任务整理为标准化 skill
+普通提交、分类提交和子模块提交的流程见 [git-commit](git-commit/SKILL.md)。
 
-## Recommended Structure
+## 目录结构
+
 ```text
 codex-skills/
-  README.md
   <skill-name>/
     SKILL.md
-    agents/
-      openai.yaml
-    scripts/
-    references/
-    assets/
-  templates/
-    basic-skill/
-      SKILL.md.template
-      agents/
-        openai.yaml.template
+    agents/openai.yaml  # 可选的界面元数据及调用配置
+    references/         # 可选的按需参考资料
+    scripts/            # 可选的辅助脚本
+    assets/             # 可选的输出资源
+  templates/basic-skill/ # 本仓库提供的起始模板
 ```
 
-## Naming Rules
-- 文件夹名称使用英文
-- 正式 skill 文件夹名称使用小写英文加连字符
-- 例如：`wordpress-store-docs`、`woo-product-setup`
+skill 目录使用小写英文、数字及连字符；`SKILL.md` 的 YAML frontmatter 包含 `name` 和 `description`。正文保持聚焦，详细或条件性的资料可以放在 `references/`，并在入口说明何时读取；是否拆分取决于实际用途，而非文件长度。
 
-## Authoring Rules
-- 每个 skill 必须包含 `SKILL.md`
-- `SKILL.md` 顶部必须包含 `name` 和 `description` 的 YAML frontmatter
-- 正文尽量精简，只写工作流、触发条件和必要约束
-- 详细说明放到 `references/`
-- 可复用脚本放到 `scripts/`
-- 模板、示例资源放到 `assets/`
+## 在项目中引用
 
-## Good Fit For Skills
-- WordPress 安装与初始化检查清单
-- WooCommerce 商品录入标准流程
-- Blocksy 主题定制记录规范
-- 站点迁移与上线检查
-- 文档整理与维护手册更新流程
+主项目可以将本仓库作为子模块放在 `.ai-skills/` 等路径，再根据项目及 Codex 的配置方式选择所需 skill，例如 `.ai-skills/codex-skills/git-commit/`。**加入子模块不等于 skill 已自动安装或可被 Codex 自动发现**；应根据当前环境的 skill 配置和项目规则确认实际可用方式。
 
-## Not A Good Fit
-- 一次性的临时讨论
-- 只适用于当前一天的待办事项
-- 已经能在某个单独项目的本地文档中清楚记录的短期状态
-
-## Suggested Workflow
-1. 先确认这项规则是否值得跨项目复用
-2. 当某项工作开始重复出现时，再抽成 skill
-3. 从 `templates/basic-skill/` 复制一份作为起点
-4. 根据用途补充 `references/`、`scripts/` 或 `assets/`
-5. 在实际项目中通过子模块或同步方式引用这个目录
-
-## Project Integration
-- 如果项目使用 Codex，可将本仓库作为 Git submodule 引入，例如放在项目根目录的 `_ai-skills/`
-- 在项目内只引用 Codex 所需的 skill，例如 `_ai-skills/codex-skills/git-commit/`
-- 如果共享 skill 与项目本地规则冲突，以项目本地规则为准
-
-## Security
-- 不要在 skill 中写入密码、密钥、许可证等敏感信息
-- 如需记录配置来源，只写位置和用途
+如果维护 Codex 和 Claude Code 的同名版本，更新后核对共同流程，同时保留各自的元数据和调用方式。模板可作为起点，但不必为简单 skill 创建没有用途的文件。
