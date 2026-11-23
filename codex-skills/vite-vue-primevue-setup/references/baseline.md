@@ -4,7 +4,7 @@
 
 ## 创建和工具
 
-- 选择兼容最新 LTS 的 Vue 3 + TypeScript 脚手架，避免重复初始化 Git。使用目标项目采用的包管理器及锁文件；没有现成项目时，与用户确认目录后再创建。
+- 新项目优先使用 Vue 官方 `create-vue` 生成基于 Vite 的 Vue 3 + TypeScript 项目，并选择 Router、Pinia、Vitest；已有项目先检查并保留配置，不重复初始化 Git。目标目录非空时不得清空或覆盖现有内容，可先在临时目录生成并核对后合并。
 - 接入 Vue Router（含根路由）、Pinia、Vue I18n 和 Vitest。国际化提供德语、英语、中文的独立资源文件；默认德语，回退英语。根据功能分组资源，并确保文本、页面标题及语言切换按项目需要接入。
 - 新项目采用本 skill 的 [Prettier 配置](../assets/prettierrc.json)。按当前 Vue/TypeScript 和 ESLint 版本配置兼容的 flat config，结合 Prettier 避免规则冲突。现有项目保留其约定，必要变更先说明。
 - 至少提供目标项目可执行的开发、构建、类型检查、lint、格式检查和 Vitest 命令；不要把已有命令当作未经验证的新命令。版本和依赖从项目 lockfile及实际安装结果核对。

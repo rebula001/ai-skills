@@ -20,18 +20,21 @@ disable-model-invocation: true
 4. 安装前核对直接依赖、相关传递依赖及字体具体版本的来源、许可和商业发行条件，记录需保留的版权及许可。许可不明、有限制或收费时，先向用户说明可选替代或旧版并取得明确选择；无法核实时标记待核实，不声称已合规。
 5. PrimeVue 限定已核实 MIT 的 v4 最新稳定版本，PrimeIcons 固定 `7.0.0`；PrimeVue Forms 选择与该 v4 兼容、许可已核实且满足条件的最新稳定版本。其他依赖以当时最新稳定版为候选，同时核查 Node、peer dependencies 和版本兼容性；若不能兼容，说明冲突并与用户确定方案，不强行安装或静默降级。
 
-## 配置基线
+## 配置顺序
 
-按 [基础配置](references/baseline.md) 分步建立并核对 Vite、Vue 3、TypeScript、Vue Router、Pinia、Vue I18n、Vitest、ESLint、Prettier、PrimeVue v4、PrimeVue Forms、PrimeIcons、Tailwind CSS、`tailwindcss-primeui` 和本地 Roboto。使用 [Prettier 默认配置](assets/prettierrc.json)作为新项目基线；现有配置不直接覆盖。
-
-按 [主题基线](references/theme.md) 提供 Aura、天空蓝主色、跟随系统的初始明暗模式、独立明暗切换、主色及 Surface 选择和颜色重置；不实现个性化持久化，不依赖特定项目的数据库。尊重目标项目对 PrimeVue 样式和组件行为的确认要求。
-
-询问是否需要 PrimeVue Chart；若需要，先按 [图表说明](references/chart.md) 核实依赖、版本及许可并取得用户确认，再安装。未选择时不安装。
+1. 按“开始之前”核对项目位置、已有文件、Node 与包管理器。对已有项目先检查实际配置，保留有效内容，不重复创建或覆盖。
+2. 新项目优先使用 Vue 官方 `create-vue` 脚手架建立基于 Vite 的 Vue 3 + TypeScript 项目，按基线选择 Router、Pinia 和 Vitest；不重复初始化 Git。不清空已有目录，必要时先在临时目录生成，核对后仅合并所需文件。
+3. 核对脚手架及生成依赖的版本、兼容性和许可，再安装基础依赖；创建骨架不等于已经安装依赖。遇到许可或版本需用户选择时遵守“开始之前”的确认规则。
+4. 安装并配置 ESLint 和 Prettier；先检查脚手架是否已生成配置，复用或调整现有结果，避免重复安装。新项目采用 [Prettier 默认配置](assets/prettierrc.json)，现有配置不直接覆盖。
+5. 启动基础项目，验证 Vite、Vue 和 TypeScript 可用；不能运行时先解决问题或说明限制，不把成功生成文件当作启动成功。
+6. 按 [基础配置](references/baseline.md) 分步配置 PrimeVue v4、PrimeVue Forms、PrimeIcons、Tailwind CSS、`tailwindcss-primeui`、Vue I18n 和本地 Roboto；检查 Router、Pinia 和 Vitest，缺少时补充。按 [主题基线](references/theme.md) 实现主题与色板，不引入业务布局或偏好持久化。使用官方文档和实际安装版本核查 API。
+7. 询问是否需要 PrimeVue Chart；若需要，先按 [图表说明](references/chart.md) 核实依赖、版本及许可并取得用户确认，再安装。未选择时不安装。运行类型检查、构建、ESLint、Prettier 和 Vitest，并验证路由及主题功能。
+8. 在页面生成少量示例，验证 PrimeVue Button 等组件能加载、Tailwind 样式生效，以及 i18n 三语切换可用。保留示例供用户查看；用户确认后再按其要求清理或保留。浏览器不可用时说明未验证项并提供手动验收步骤。
 
 使用官方文档及目标项目实际安装版本核查配置，不能访问时说明限制并结合已安装包核对，不推测 API。不要一次生成业务模块、布局或预置业务文案。
 
 ## 验证与交付
 
 - 使用目标项目的命令验证类型检查、构建、ESLint、Prettier 和 Vitest；配置命令时确保它们真实可运行。检查 Router、Pinia、三语、PrimeVue Forms、Icons、主题和样式集成。
-- 为路由、主题切换及表单等准备最小验证方式，验证后清理临时演示内容或明确说明保留内容。浏览器不可用时如实报告，并给出用户可操作的验收步骤，不将构建通过当作视觉测试通过。
+- 为路由、主题切换及表单等准备最小验证方式；按上面的步骤保留页面示例供用户验收。浏览器不可用时如实报告，不将构建通过当作视觉测试通过。
 - 报告前端位置、选择的版本与许可核查范围、已执行检查及结果、未验证事项；若涉及依赖或配置变更，遵守目标项目的文档与交付规则。
