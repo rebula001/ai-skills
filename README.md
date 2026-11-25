@@ -4,6 +4,7 @@
 
 - [Codex skills](codex-skills/README.md)
 - [Claude Code skills](claude-skills/README.md)
+- [标准工作时段流程](workflows/work-session.md)：由各项目的协作入口明确引用，并在各自仓库维护任务记录。
 
 不同助手的版本分别维护；更新共同工作流程时，检查两个版本是否需要同步，同时保留各自的配置差异。skill 的入口是 `SKILL.md`，按需使用同目录下的参考资料、脚本或资源。
 
