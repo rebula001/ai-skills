@@ -1,7 +1,8 @@
 # AI Skills
 
-本仓库维护可在不同项目中复用的 AI skills：
+本仓库维护可在不同项目中复用的 AI skills、工作流程和协作规则：
 
+- [Markdown 书写规则](rules/markdown.md)：由项目明确采用，统一 Markdown 文档和示例的写法。
 - [Codex skills](codex-skills/README.md)
 - [Claude Code skills](claude-skills/README.md)
 - [标准工作时段流程](workflows/work-session.md)：由各项目的协作入口明确引用，并在各自仓库维护任务记录。
