@@ -2,7 +2,13 @@
 
 本目录维护供 Claude Code 使用的共享 skills。共享仓库的使用与编写原则见[根目录 README](../README.md)。
 
-普通提交、分类提交和子模块提交的流程见 [git-commit](git-commit/SKILL.md)。
+## Skills
+
+- [dependabot-pr-review](dependabot-pr-review/SKILL.md)：检查和验证 Dependabot 更新 PR。
+- [git-commit](git-commit/SKILL.md)：普通提交、分类提交和子模块提交。
+- [plan](plan/SKILL.md)：任务规划。
+- [release-versioning](release-versioning/SKILL.md)：版本与发布规划。
+- [vite-vue-primevue-setup](vite-vue-primevue-setup/SKILL.md)：配置前端开发环境。
 
 ## 目录结构
 

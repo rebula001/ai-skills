@@ -1,0 +1,4 @@
+interface:
+  display_name: "Dependabot PR Review"
+  short_description: "Review dependency updates and security fixes"
+  default_prompt: "Use $dependabot-pr-review to inspect and validate this Dependabot pull request before recommending whether to merge."
